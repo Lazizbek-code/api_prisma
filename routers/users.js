@@ -10,5 +10,6 @@ router.get('/:id', auth, userController.getOne)
 router.post('/', auth, userController.create)
 router.put('/:id', auth, userController.update)
 router.delete('/:id', auth, userController.delete)
+router.put('/change_active/:id', auth, userController.changeActive)
 
 module.exports = router
