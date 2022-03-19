@@ -55,9 +55,9 @@ module.exports.update = async (req, res)=>{
         const { id } = req.params
         const user = await prisma.user.update({
             data: {
-                fullname:data.fullname,
-                username:data.username,
-                password:await bcrypt.hash(data.password, 10),
+                fullname,
+                username,
+                password:await bcrypt.hash(password, 10),
             },
             where:{
                 id:parseInt(id)
