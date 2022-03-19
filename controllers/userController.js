@@ -1,11 +1,10 @@
-const {PrismaClient} = require('@prisma/client')
-const prisma = new PrismaClient()
+const {user} = require('../config/prismaClient')
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
 module.exports.getAllUsers = async (req, res)=>{
     try {
-        const users = await prisma.user.findMany()
+        const users = await user.findMany()
         res.status(200).json(users)
     } catch (error) {
         res.status(400).json(error.message)
@@ -14,7 +13,7 @@ module.exports.getAllUsers = async (req, res)=>{
 
 module.exports.getOne = async (req, res)=>{
     try {
-        const user = await prisma.user.findFirst({
+        const user = await user.findFirst({
             where: {
                 id:parseInt(req.params.id)
             }
@@ -33,7 +32,7 @@ module.exports.create = async (req, res)=>{
             // let message = validator.error.details.map(err => err.message);
             res.status(400).json({message: "Malumotni to'liq kiriting"})
         }else{
-            const user = await prisma.user.create({
+            const user = await user.create({
                 data: {
                     fullname,
                     username,
@@ -53,7 +52,7 @@ module.exports.update = async (req, res)=>{
     try {
         const { fullname, username, password } = req.body
         const { id } = req.params
-        const user = await prisma.user.update({
+        const user = await user.update({
             data: {
                 fullname,
                 username,
@@ -74,7 +73,7 @@ module.exports.update = async (req, res)=>{
 module.exports.delete = async (req, res)=>{
     try {
         const { id } = req.params
-        const deletedUser = await prisma.user.delete({
+        const deletedUser = await user.delete({
             where:{
                 id:parseInt(id)
             }
@@ -87,12 +86,12 @@ module.exports.delete = async (req, res)=>{
 }
 
 module.exports.changeActive = async (req, res)=>{
-    const user = await prisma.user.findFirst({
+    const user = await user.findFirst({
         where: {
             id:parseInt(req.params.id)
         }
     })
-    const updateUser = await prisma.user.update({
+    const updateUser = await user.update({
         data: {
             active:!user.active,
         },
