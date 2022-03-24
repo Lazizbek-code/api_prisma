@@ -29,6 +29,7 @@ module.exports.create = async (req, res)=>{
         const { fullname, username, password } = req.body
         const validator = userValidator(req.body)
         if (validator.error) {
+            console.log(validator.error)
             // let message = validator.error.details.map(err => err.message);
             res.status(400).json({message: "Malumotni to'liq kiriting"})
         }else{
@@ -52,12 +53,13 @@ module.exports.update = async (req, res)=>{
     try {
         const { fullname, username, password } = req.body
         const { id } = req.params
+        const data = {fullname,username}
+        if (password) {
+            password = await bcrypt.hash(password,10)
+            data.password = password;
+        }
         const user = await user.update({
-            data: {
-                fullname,
-                username,
-                password:await bcrypt.hash(password, 10),
-            },
+            data,
             where:{
                 id:parseInt(id)
             }
